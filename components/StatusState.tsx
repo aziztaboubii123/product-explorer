@@ -4,7 +4,7 @@ export function LoadingState() {
   return (
     <div>
       <p className="mb-4 text-center text-sm text-slate-500">
-        Chargement des pays…
+        Chargement des produits…
       </p>
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {Array.from({ length: 8 }).map((_, i) => (
@@ -12,7 +12,7 @@ export function LoadingState() {
             key={i}
             className="animate-pulse overflow-hidden rounded-2xl border border-slate-200 bg-white"
           >
-            <div className="aspect-[3/2] bg-slate-200" />
+            <div className="h-48 bg-slate-200" />
             <div className="space-y-3 p-5">
               <div className="h-4 w-2/3 rounded bg-slate-200" />
               <div className="h-3 w-full rounded bg-slate-200" />
@@ -78,8 +78,8 @@ export function EmptyState({ query }: { query: string }) {
       <h2 className="mt-4 text-lg font-semibold text-slate-900">Aucun résultat</h2>
       <p className="mt-2 text-sm text-slate-600">
         {query
-          ? `Aucun pays ne correspond à « ${query} ».`
-          : "Aucun pays ne correspond à vos filtres."}
+          ? `Aucun produit ne correspond à « ${query} ».`
+          : "Aucun produit ne correspond à vos filtres."}
       </p>
     </div>
   );
