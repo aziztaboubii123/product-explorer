@@ -1,11 +1,11 @@
 "use client";
 
-type Props = {
-  value: string;
-  onChange: (value: string) => void;
-};
+import { useProductStore } from "@/lib/store";
 
-export function SearchBar({ value, onChange }: Props) {
+export function SearchBar() {
+  const query = useProductStore((s) => s.query);
+  const setQuery = useProductStore((s) => s.setQuery);
+
   return (
     <div className="relative flex-1">
       <svg
@@ -15,13 +15,18 @@ export function SearchBar({ value, onChange }: Props) {
         aria-hidden="true"
       >
         <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" />
-        <path d="m20 20-3.5-3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+        <path
+          d="m20 20-3.5-3.5"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
       </svg>
 
       <input
         type="search"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
         placeholder="Rechercher un produit..."
         aria-label="Rechercher un produit"
         className="h-12 w-full rounded-xl border border-slate-200 bg-white pl-10 pr-4 text-sm shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"

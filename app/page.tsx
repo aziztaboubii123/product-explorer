@@ -1,28 +1,30 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { useProducts } from "@/hooks/useProducts";
+import { useEffect, useMemo } from "react";
+import { useProductStore } from "@/lib/store";
 import { SearchBar } from "@/components/SearchBar";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { ProductCard } from "@/components/ProductCard";
 import { LoadingState, ErrorState, EmptyState } from "@/components/StatusState";
 
 export default function Home() {
-  const { products, status, error, retry } = useProducts();
-  const [query, setQuery] = useState("");
-  const [category, setCategory] = useState("all");
+  const products = useProductStore((s) => s.products);
+  const status = useProductStore((s) => s.status);
+  const error = useProductStore((s) => s.error);
+  const query = useProductStore((s) => s.query);
+  const category = useProductStore((s) => s.category);
+  const fetchProducts = useProductStore((s) => s.fetchProducts);
 
-  const categories = useMemo(() => {
-    const set = new Set(products.map((p) => p.category));
-    return ["all", ...Array.from(set).sort()];
-  }, [products]);
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return products.filter((product) => {
-      const matchesQuery = q === "" || product.title.toLowerCase().includes(q);
-      const matchesCategory = category === "all" || product.category === category;
-      return matchesQuery && matchesCategory;
+    return products.filter((p) => {
+      const matchQuery = q === "" || p.title.toLowerCase().includes(q);
+      const matchCategory = category === "all" || p.category === category;
+      return matchQuery && matchCategory;
     });
   }, [products, query, category]);
 
@@ -33,23 +35,19 @@ export default function Home() {
           Product Explorer
         </h1>
         <p className="mt-3 text-base text-slate-600">
-          Consommation d'API en direct — recherche, filtre par catégorie, et
-          gestion des erreurs.
+          État global avec Zustand — recherche, filtre, et gestion des erreurs.
         </p>
       </header>
 
       <div className="mb-8 flex flex-col gap-3 sm:flex-row">
-        <SearchBar value={query} onChange={setQuery} />
-        <CategoryFilter
-          value={category}
-          onChange={setCategory}
-          categories={categories}
-          disabled={status !== "success"}
-        />
+        <SearchBar />
+        <CategoryFilter />
       </div>
 
       {status === "loading" && <LoadingState />}
-      {status === "error" && <ErrorState message={error} onRetry={retry} />}
+      {status === "error" && (
+        <ErrorState message={error} onRetry={fetchProducts} />
+      )}
       {status === "success" && filtered.length === 0 && (
         <EmptyState query={query} />
       )}

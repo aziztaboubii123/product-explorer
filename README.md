@@ -24,3 +24,25 @@ Une application web qui consomme l'API publique [DummyJSON](https://dummyjson.co
 - **Tailwind CSS v4**
 
 ## 📁 Structure du projet
+product-explorer/
+├── app/
+│ ├── layout.tsx
+│ ├── page.tsx
+│ └── globals.css
+├── components/
+│ ├── ProductCard.tsx
+│ ├── SearchBar.tsx
+│ ├── CategoryFilter.tsx
+│ └── StatusState.tsx
+├── hooks/
+│ └── useProducts.ts
+└── lib/
+└── types.ts
+
+## 🚀 Lancer en local
+
+```bash
+git clone https://github.com/<votre-user>/product-explorer.git
+cd product-explorer
+npm install
+npm run dev
